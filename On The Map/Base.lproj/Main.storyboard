@@ -136,6 +136,7 @@
                                 <action selector="logoutSession:" destination="eKT-9d-8K9" id="tmQ-OV-wVa"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="icon_refresh" id="8Io-Cb-1rn"/>
                     </navigationItem>
                     <connections>
                         <outlet property="logoutUser" destination="lFq-Gw-fxB" id="ivO-RO-xdI"/>
@@ -187,26 +188,40 @@
         <scene sceneID="xz0-gM-9lU">
             <objects>
                 <tableViewController id="7lO-iH-EWH" customClass="OTMTableViewController" customModule="On_The_Map" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="jYV-BX-8MN">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" id="jYV-BX-8MN">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="studentInfo" id="LS4-cT-MoV" customClass="OTMTableViewCell" customModule="On_The_Map" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="28" width="375" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LS4-cT-MoV" id="h13-U0-Dhb">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="59"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tKZ-R8-FMj">
-                                            <rect key="frame" x="19" y="11" width="42" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_pin" translatesAutoresizingMaskIntoConstraints="NO" id="F5p-uR-RAC">
+                                            <rect key="frame" x="10" y="0.0" width="50" height="59"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="50" id="n5H-eA-ifW"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tKZ-R8-FMj">
+                                            <rect key="frame" x="75" y="19" width="292" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottomMargin" secondItem="tKZ-R8-FMj" secondAttribute="bottom" constant="11" id="0Wb-bG-1E9"/>
+                                        <constraint firstItem="F5p-uR-RAC" firstAttribute="top" secondItem="h13-U0-Dhb" secondAttribute="top" id="0in-Bo-5lc"/>
+                                        <constraint firstItem="tKZ-R8-FMj" firstAttribute="leading" secondItem="F5p-uR-RAC" secondAttribute="trailing" constant="15" id="Z0h-iZ-Cs2"/>
+                                        <constraint firstAttribute="bottom" secondItem="F5p-uR-RAC" secondAttribute="bottom" id="aKb-xH-oeo"/>
+                                        <constraint firstItem="tKZ-R8-FMj" firstAttribute="top" secondItem="h13-U0-Dhb" secondAttribute="topMargin" constant="11" id="im2-Os-DFJ"/>
+                                        <constraint firstItem="F5p-uR-RAC" firstAttribute="leading" secondItem="h13-U0-Dhb" secondAttribute="leading" constant="10" id="r0Y-CZ-9Bm"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="tKZ-R8-FMj" secondAttribute="trailing" id="vcr-CK-WM2"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="personName" destination="tKZ-R8-FMj" id="U1l-tM-JSJ"/>
@@ -222,7 +237,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1aM-he-lIV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2687" y="392"/>
+            <point key="canvasLocation" x="2685.5999999999999" y="391.75412293853077"/>
         </scene>
         <!--List-->
         <scene sceneID="xac-aD-J0W">
@@ -249,6 +264,8 @@
         <image name="icon_listview-selected" width="75" height="50"/>
         <image name="icon_mapview-deselected" width="75" height="50"/>
         <image name="icon_mapview-selected" width="75" height="50"/>
+        <image name="icon_pin" width="24" height="24"/>
+        <image name="icon_refresh" width="24" height="24"/>
         <image name="udacity_icon" width="62" height="62"/>
     </resources>
 </document>

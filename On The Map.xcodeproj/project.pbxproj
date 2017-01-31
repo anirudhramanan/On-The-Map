@@ -99,6 +99,23 @@
 			name = NetworkHelper;
 			sourceTree = "<group>";
 		};
+		662C1F651E410A33000CDCCE /* Map View */ = {
+			isa = PBXGroup;
+			children = (
+				662C1F561E40CEAF000CDCCE /* OTMMapViewController.swift */,
+			);
+			name = "Map View";
+			sourceTree = "<group>";
+		};
+		662C1F681E411DF7000CDCCE /* Table View */ = {
+			isa = PBXGroup;
+			children = (
+				662C1F5F1E40EA59000CDCCE /* OTMTableViewController.swift */,
+				662C1F631E4102F8000CDCCE /* OTMTableViewCell.swift */,
+			);
+			name = "Table View";
+			sourceTree = "<group>";
+		};
 		6662F06A1E3F831700494E15 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -167,11 +184,10 @@
 		66FE210B1E3DD37A00972DE7 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				662C1F681E411DF7000CDCCE /* Table View */,
+				662C1F651E410A33000CDCCE /* Map View */,
 				66F1E9D21E4087760044D32C /* Delegates */,
 				66FE20ED1E3DCCE000972DE7 /* LoginViewController.swift */,
-				662C1F561E40CEAF000CDCCE /* OTMMapViewController.swift */,
-				662C1F5F1E40EA59000CDCCE /* OTMTableViewController.swift */,
-				662C1F631E4102F8000CDCCE /* OTMTableViewCell.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";

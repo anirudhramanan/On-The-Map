@@ -14,7 +14,10 @@ struct StudentInformationStore {
     
     mutating func addStudentInformation(_ results: [[String:AnyObject]]) -> [StudentInformation] {
         for result in results {
-            studentInformation.append(StudentInformation(jsonData: result))
+            let studentInfo = StudentInformation(jsonData: result)
+            if studentInfo.firstName != "" && studentInfo.lastName != "" {
+                studentInformation.append(studentInfo)
+            }
         }
         return studentInformation
     }
