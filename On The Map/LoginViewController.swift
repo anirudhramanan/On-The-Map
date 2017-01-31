@@ -13,6 +13,8 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var loaderIndicator: UIActivityIndicatorView!
+    
     var textFieldDelegate = LoginViewTextFieldDelegate()
     
     override func viewDidLoad() {
@@ -31,7 +33,7 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func signup(_ sender: Any) {
-        
+        UIApplication.shared.open(NSURL(string:"https://auth.udacity.com/sign-up") as! URL, options: [:], completionHandler: nil)
     }
     
     @IBAction func login(_ sender: Any) {
@@ -39,16 +41,20 @@ class LoginViewController: UIViewController {
         let password = passwordTextField.text
         
         if isValidEmail() && isPasswordValid() {
+            configureUI(enabled: false)
             NetworkClient.sharedInstance().authenticateUser(username: username!, password: password!,  completionHandlerForAuth: { (success, error) in
-                if success {
-                    DispatchQueue.main.async {
+                DispatchQueue.main.async {
+                    if success {
                         let controller = self.storyboard!.instantiateViewController(withIdentifier: "OnTheMapTabController") as! UITabBarController
                         self.present(controller, animated: true, completion: nil)
+                    } else{
+                        self.configureUI(enabled: true)
+                        self.showAlertForIncorrectState(message: "Incorrect Email Address or Password")
                     }
                 }
             })
         } else{
-            showAlertForIncorrectState()
+            showAlertForIncorrectState(message: "Enter a valid email address or password")
         }
     }
     
@@ -71,13 +77,16 @@ extension LoginViewController{
         return count > 5
     }
     
-    func showAlertForIncorrectState() {
-        let alert = UIAlertController(title: "Error", message: "Enter valid email and password!", preferredStyle: UIAlertControllerStyle.actionSheet)
+    func showAlertForIncorrectState(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.actionSheet)
         alert.addAction(UIAlertAction(title: "Back", style: UIAlertActionStyle.default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
     
-    func loginCompleteHandler() -> () {
-        
+    func configureUI(enabled: Bool) {
+        usernameTextField.isEnabled = enabled
+        passwordTextField.isEnabled = enabled
+        loginButton.isEnabled = enabled
+        loaderIndicator.isHidden = enabled
     }
 }
