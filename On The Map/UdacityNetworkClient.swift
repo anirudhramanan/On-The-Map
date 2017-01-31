@@ -21,18 +21,17 @@ extension NetworkClient {
             if error != nil { // Handle error…
                 return
             }
-            let range = Range(uncheckedBounds: (5, data!.count - 5))
+            let range = Range(uncheckedBounds: (5, data!.count))
             let newData = data?.subdata(in: range)
+
+            let json = try? JSONSerialization.jsonObject(with: newData!, options: [])
+            let session: Session = Session(jsonData: json as! [String : Any])!
             
-            var parsedResult: [String : AnyObject]!
-            do {
-                parsedResult = try JSONSerialization.jsonObject(with: newData!, options: .allowFragments) as! [String:AnyObject]
-                print(parsedResult)
-            }catch {
-                print("parsing error")
+            let success = (session.account?.registered)!
+                
+            if success {
+                completionHandlerForAuth(success, error?.localizedDescription)
             }
-            
-            completionHandlerForAuth(true, error?.localizedDescription)
         }
         task.resume()
     }
