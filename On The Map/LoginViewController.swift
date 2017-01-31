@@ -37,44 +37,27 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func login(_ sender: Any) {
-        let username = usernameTextField.text
-        let password = passwordTextField.text
-        
-        if isValidEmail() && isPasswordValid() {
-            configureUI(enabled: false)
-            NetworkClient.sharedInstance().authenticateUser(username: username!, password: password!,  completionHandlerForAuth: { (success, error) in
-                DispatchQueue.main.async {
-                    if success {
-                        let controller = self.storyboard!.instantiateViewController(withIdentifier: "OnTheMapTabController") as! UITabBarController
-                        self.present(controller, animated: true, completion: nil)
-                    } else{
-                        self.configureUI(enabled: true)
-                        self.showAlertForIncorrectState(message: "Incorrect Email Address or Password")
-                    }
-                }
-            })
-        } else{
-            showAlertForIncorrectState(message: "Enter a valid email address or password")
-        }
-    }
-    
-    private func configureTextFieldDelegate() {
-        textFieldDelegate.view = self.view
-        usernameTextField.delegate = textFieldDelegate
-        passwordTextField.delegate = textFieldDelegate
+        checkAndPerformLogin()
     }
 }
 
 extension LoginViewController{
-    func isValidEmail() -> Bool {
+    
+    private func isValidEmail() -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         return emailTest.evaluate(with: usernameTextField.text)
     }
     
-    func isPasswordValid() -> Bool{
+    private func isValidPassword() -> Bool{
         let count = passwordTextField.text?.characters.count ?? 0
         return count > 5
+    }
+    
+    func configureTextFieldDelegate() {
+        textFieldDelegate.view = self.view
+        usernameTextField.delegate = textFieldDelegate
+        passwordTextField.delegate = textFieldDelegate
     }
     
     func showAlertForIncorrectState(message: String) {
@@ -88,5 +71,30 @@ extension LoginViewController{
         passwordTextField.isEnabled = enabled
         loginButton.isEnabled = enabled
         loaderIndicator.isHidden = enabled
+    }
+    
+    func checkAndPerformLogin() {
+        let username = usernameTextField.text
+        let password = passwordTextField.text
+        let networkAvailable = NetworkConnectivityManager.isInternetAvailable()
+        
+        if isValidEmail() && isValidPassword() && networkAvailable {
+            configureUI(enabled: false)
+            NetworkClient.sharedInstance().authenticateUser(username: username!, password: password!,  completionHandlerForAuth: { (success, error) in
+                DispatchQueue.main.async {
+                    if success {
+                        let controller = self.storyboard!.instantiateViewController(withIdentifier: "OnTheMapTabController") as! UITabBarController
+                        self.present(controller, animated: true, completion: nil)
+                    } else {
+                        self.configureUI(enabled: true)
+                        self.showAlertForIncorrectState(message: "Incorrect Credentials : Email Address or Password")
+                    }
+                }
+            })
+        } else if !networkAvailable{
+            showAlertForIncorrectState(message: "No Interent Connectivity. Connect to a working internet connection")
+        } else {
+            showAlertForIncorrectState(message: "Enter a valid Email Address / Password")
+        }
     }
 }
