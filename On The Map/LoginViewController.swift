@@ -81,14 +81,13 @@ extension LoginViewController{
         if isValidEmail() && isValidPassword() && networkAvailable {
             configureUI(enabled: false)
             NetworkClient.sharedInstance().authenticateUser(username: username!, password: password!,  completionHandlerForAuth: { (success, error) in
-                DispatchQueue.main.async {
-                    if success {
-                        let controller = self.storyboard!.instantiateViewController(withIdentifier: "OnTheMapTabController") as! UITabBarController
-                        self.present(controller, animated: true, completion: nil)
-                    } else {
-                        self.configureUI(enabled: true)
-                        self.showAlertForIncorrectState(message: error!)
-                    }
+                self.configureUI(enabled: true)
+                if success {
+                    let controller = self.storyboard!.instantiateViewController(withIdentifier: "OnTheMapTabController") as! UITabBarController
+                    self.present(controller, animated: true, completion: nil)
+                } else {
+                    self.configureUI(enabled: true)
+                    self.showAlertForIncorrectState(message: error!)
                 }
             })
         } else if !networkAvailable{

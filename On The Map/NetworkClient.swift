@@ -8,7 +8,7 @@
 
 import Foundation
 
-class NetworkClient : NSObject {
+class NetworkClient {
     
     var session = URLSession.shared
     var sessionID: String? = nil

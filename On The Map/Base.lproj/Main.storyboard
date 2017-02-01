@@ -131,13 +131,17 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="On The Map" id="skG-2g-yvs">
-                        <barButtonItem key="leftBarButtonItem" image="icon_pin" id="bfN-aC-oT0">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="qhQ-h9-BFC">
+                            <connections>
+                                <action selector="logoutUser:" destination="eKT-9d-8K9" id="0cR-0b-n3d"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="icon_pin" id="bfN-aC-oT0">
                             <connections>
                                 <action selector="selectPin:" destination="eKT-9d-8K9" id="TDa-pP-Ahc"/>
                                 <segue destination="Z6o-FK-aFt" kind="presentation" id="AF1-fq-v04"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="icon_refresh" id="8Io-Cb-1rn"/>
                     </navigationItem>
                     <connections>
                         <outlet property="mapView" destination="Efu-dG-Tyv" id="icy-Lc-Iq8"/>
@@ -146,7 +150,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V00-Av-Rr3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2687.1999999999998" y="-285.60719640179911"/>
+            <point key="canvasLocation" x="2686" y="-286"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="9mV-v2-ySw">
@@ -234,7 +238,10 @@
                             <outlet property="delegate" destination="7lO-iH-EWH" id="MCN-Oi-EzW"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="5Lf-6Q-xG7"/>
+                    <navigationItem key="navigationItem" id="5Lf-6Q-xG7">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="kJQ-kY-ptu"/>
+                        <barButtonItem key="rightBarButtonItem" image="icon_pin" id="0Fh-ze-oLU"/>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1aM-he-lIV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -339,7 +346,6 @@
         <image name="icon_mapview-deselected" width="75" height="50"/>
         <image name="icon_mapview-selected" width="75" height="50"/>
         <image name="icon_pin" width="24" height="24"/>
-        <image name="icon_refresh" width="24" height="24"/>
         <image name="udacity_icon" width="62" height="62"/>
     </resources>
 </document>

@@ -19,7 +19,8 @@ struct Session {
             let key = account["key"] as? String,
             let session = jsonData["session"] as? [String: Any],
             let sessionId = session["id"] as? String,
-            let expiration = session["expiration"] as? String else{
+            let expiration = session["expiration"] as? String
+            else{
                 return nil
         }
         

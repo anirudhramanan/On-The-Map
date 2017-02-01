@@ -20,16 +20,28 @@ struct StudentInformation {
     var uniqueKey: String
     var updatedAt: String
     
-    init(jsonData: [String: AnyObject]) {
-        self.createdAt = jsonData["createdAt"] as? String ?? ""
-        self.firstName = jsonData["firstName"] as? String ?? ""
-        self.lastName = jsonData["lastName"] as? String ?? ""
-        self.latitude = jsonData["latitude"] as? Double ?? 0.0
-        self.longitude = jsonData["longitude"] as? Double ?? 0.0
-        self.mapString = jsonData["mapString"] as? String ?? ""
-        self.mediaURL = jsonData["mediaURL"] as? String ?? ""
-        self.objectId = jsonData["objectId"] as? String ?? ""
-        self.uniqueKey = jsonData["uniqueKey"] as? String ?? ""
-        self.updatedAt = jsonData["updatedAt"] as? String ?? ""
+    init?(jsonData: [String: AnyObject]) {
+        guard let createdAt = jsonData["createdAt"] as? String,
+            let firstName = jsonData["firstName"] as? String,
+            let lastName = jsonData["lastName"] as? String,
+            let latitude = jsonData["latitude"] as? Double,
+            let longitude = jsonData["longitude"] as? Double,
+            let mapString = jsonData["mapString"] as? String,
+            let mediaURL = jsonData["mediaURL"] as? String,
+            let objectId = jsonData["objectId"] as? String,
+            let uniqueKey = jsonData["uniqueKey"] as? String,
+            let updatedAt = jsonData["updatedAt"] as? String else{
+                return nil
+        }
+        self.createdAt = createdAt
+        self.firstName = firstName
+        self.lastName = lastName
+        self.latitude = latitude
+        self.longitude = longitude
+        self.mapString = mapString
+        self.mediaURL = mediaURL
+        self.objectId = objectId
+        self.uniqueKey = uniqueKey
+        self.updatedAt = updatedAt
     }
 }

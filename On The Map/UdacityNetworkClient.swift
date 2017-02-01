@@ -20,7 +20,9 @@ extension NetworkClient {
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil {
                 //error
-                completionHandlerForAuth(false, error?.localizedDescription)
+                DequeuThread.runOnMainThread({
+                    completionHandlerForAuth(false, error?.localizedDescription)
+                })
                 return
             }
             
@@ -36,15 +38,19 @@ extension NetworkClient {
             let success = (session.account?.registered)!
                 
             if success {
-                completionHandlerForAuth(success, error?.localizedDescription)
+                DequeuThread.runOnMainThread({
+                    completionHandlerForAuth(success, error?.localizedDescription)
+                })
             } else{
-                completionHandlerForAuth(false, "Something went wrong!")
+                DequeuThread.runOnMainThread({
+                    completionHandlerForAuth(false, "Something went wrong!")
+                })
             }
         }
         task.resume()
     }
     
-    func logoutUser() {
+    func logoutUserSession(completionForLogout: @escaping(_ success: Bool, _ error: String?) -> Void) {
         let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
         request.httpMethod = "DELETE"
         var xsrfCookie: HTTPCookie? = nil
@@ -58,11 +64,21 @@ extension NetworkClient {
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error…
+                DequeuThread.runOnMainThread({
+                    completionForLogout(false, error?.localizedDescription)
+                })
+            }
+            
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
+                DequeuThread.runOnMainThread({
+                    completionForLogout(false, "Something went wrong")
+                })
                 return
             }
-            let range = Range(uncheckedBounds: (5, data!.count - 5))
-            let newData = data?.subdata(in: range) /* subset response data! */
-            print(NSString(data: newData!, encoding: String.Encoding.utf8.rawValue)!)
+            
+            DequeuThread.runOnMainThread({
+                completionForLogout(true, nil)
+            })
         }
         task.resume()
     }

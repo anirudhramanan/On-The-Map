@@ -14,7 +14,7 @@ class OTMTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        studentInformation = StudentInformationStore.sharedInstance.studentInformation
+        loadData()
     }
 
     // MARK: - Table view data source
@@ -31,12 +31,20 @@ class OTMTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "studentInfo", for: indexPath) as! OTMTableViewCell
-        cell.personName.text = studentInformation[indexPath.row].firstName
+        let studentInfo = studentInformation[indexPath.row]
+        cell.personName.text = studentInfo.firstName + " " + studentInfo.lastName
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let studentInfo = studentInformation[indexPath.row]
         UIApplication.shared.open(NSURL(string: studentInfo.mediaURL) as! URL, options: [:], completionHandler: nil)
+    }
+    
+    private func loadData() {
+        studentInformation = StudentInformationStore.sharedInstance.studentInformation
+        studentInformation.sort(by : {
+            $0.createdAt > $1.createdAt
+        })
     }
 }
