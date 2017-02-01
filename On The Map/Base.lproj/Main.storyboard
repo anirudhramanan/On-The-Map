@@ -198,7 +198,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LS4-cT-MoV" id="h13-U0-Dhb">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="59"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_pin" translatesAutoresizingMaskIntoConstraints="NO" id="F5p-uR-RAC">
@@ -275,7 +275,21 @@
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d12-ct-e9o">
                                         <rect key="frame" x="0.0" y="215.5" width="375" height="216"/>
+                                        <subviews>
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter location" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KYG-if-VID">
+                                                <rect key="frame" x="0.0" y="20" width="375" height="176"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="29"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                        </subviews>
                                         <color key="backgroundColor" red="0.40000000600000002" green="0.40000000600000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="KYG-if-VID" secondAttribute="bottom" constant="20" id="N2L-Li-eoM"/>
+                                            <constraint firstItem="KYG-if-VID" firstAttribute="top" secondItem="d12-ct-e9o" secondAttribute="top" constant="20" id="QQ0-xY-tBb"/>
+                                            <constraint firstItem="KYG-if-VID" firstAttribute="leading" secondItem="d12-ct-e9o" secondAttribute="leading" id="U15-ih-4lJ"/>
+                                            <constraint firstAttribute="trailing" secondItem="KYG-if-VID" secondAttribute="trailing" id="cOc-G4-duc"/>
+                                        </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RWi-bc-V9c">
                                         <rect key="frame" x="0.0" y="431.5" width="375" height="215.5"/>

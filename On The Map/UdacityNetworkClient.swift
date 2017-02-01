@@ -18,19 +18,27 @@ extension NetworkClient {
         request.httpBody = "{\"udacity\": {\"username\": \"\(username)\", \"password\": \"\(password)\"}}".data(using: String.Encoding.utf8)
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            if error != nil { // Handle error…
+            if error != nil {
+                //error
+                completionHandlerForAuth(false, error?.localizedDescription)
                 return
             }
+            
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
+                completionHandlerForAuth(false, "Incorrect Credentials")
+                return
+            }
+            
             let range = Range(uncheckedBounds: (5, data!.count))
             let newData = data?.subdata(in: range)
-
             let json = try? JSONSerialization.jsonObject(with: newData!, options: [])
             let session: Session = Session(jsonData: json as! [String : Any])!
-            
             let success = (session.account?.registered)!
                 
             if success {
                 completionHandlerForAuth(success, error?.localizedDescription)
+            } else{
+                completionHandlerForAuth(false, "Something went wrong!")
             }
         }
         task.resume()

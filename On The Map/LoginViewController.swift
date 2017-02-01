@@ -87,7 +87,7 @@ extension LoginViewController{
                         self.present(controller, animated: true, completion: nil)
                     } else {
                         self.configureUI(enabled: true)
-                        self.showAlertForIncorrectState(message: "Incorrect Credentials : Email Address or Password")
+                        self.showAlertForIncorrectState(message: error!)
                     }
                 }
             })
