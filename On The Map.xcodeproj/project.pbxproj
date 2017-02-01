@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		660C65E21E423BD500CBED84 /* PostingMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660C65E11E423BD500CBED84 /* PostingMapViewController.swift */; };
 		662C1F551E40BE54000CDCCE /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 662C1F541E40BE54000CDCCE /* MapKit.framework */; };
 		662C1F571E40CEAF000CDCCE /* OTMMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662C1F561E40CEAF000CDCCE /* OTMMapViewController.swift */; };
 		662C1F5A1E40CFE4000CDCCE /* NetworkConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662C1F591E40CFE4000CDCCE /* NetworkConnectivityManager.swift */; };
@@ -41,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		660C65E11E423BD500CBED84 /* PostingMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostingMapViewController.swift; sourceTree = "<group>"; };
 		662C1F541E40BE54000CDCCE /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		662C1F561E40CEAF000CDCCE /* OTMMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMMapViewController.swift; sourceTree = "<group>"; };
 		662C1F591E40CFE4000CDCCE /* NetworkConnectivityManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkConnectivityManager.swift; sourceTree = "<group>"; };
@@ -87,6 +89,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		660C65E01E423BA900CBED84 /* Student Pin */ = {
+			isa = PBXGroup;
+			children = (
+				662C1F691E412474000CDCCE /* PostingPinViewController.swift */,
+				660C65E11E423BD500CBED84 /* PostingMapViewController.swift */,
+			);
+			name = "Student Pin";
+			sourceTree = "<group>";
+		};
 		662C1F531E40BE54000CDCCE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -189,11 +200,11 @@
 		66FE210B1E3DD37A00972DE7 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				660C65E01E423BA900CBED84 /* Student Pin */,
 				662C1F681E411DF7000CDCCE /* Table View */,
 				662C1F651E410A33000CDCCE /* Map View */,
 				66F1E9D21E4087760044D32C /* Delegates */,
 				66FE20ED1E3DCCE000972DE7 /* LoginViewController.swift */,
-				662C1F691E412474000CDCCE /* PostingPinViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -301,6 +312,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				660C65E21E423BD500CBED84 /* PostingMapViewController.swift in Sources */,
 				662C1F5A1E40CFE4000CDCCE /* NetworkConnectivityManager.swift in Sources */,
 				66F1E9D91E409FBD0044D32C /* Session.swift in Sources */,
 				662C1F571E40CEAF000CDCCE /* OTMMapViewController.swift in Sources */,
