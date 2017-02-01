@@ -11,7 +11,6 @@ import MapKit
 
 class OTMMapViewController: UIViewController, MKMapViewDelegate {
     
-    @IBOutlet weak var logoutUser: UIBarButtonItem!
     @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
@@ -35,10 +34,9 @@ class OTMMapViewController: UIViewController, MKMapViewDelegate {
         })
     }
     
-    @IBAction func logoutSession(_ sender: Any) {
-        
+    @IBAction func selectPin(_ sender: Any) {
     }
-    
+    @IBOutlet weak var selectPin: UIBarButtonItem!
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
         let reuseId = "pin"
