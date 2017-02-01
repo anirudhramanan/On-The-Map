@@ -29,7 +29,6 @@ class PostingPinViewController: UIViewController, MKMapViewDelegate {
             guard let destVC = segue.destination as? PostingMapViewController else{
                 fatalError("Unexpected destination: \(segue.destination)")
             }
-        
             destVC.enteredLocation = locationText.text
             break
         default:

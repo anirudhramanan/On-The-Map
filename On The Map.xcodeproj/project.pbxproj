@@ -19,6 +19,7 @@
 		662C1F6A1E412474000CDCCE /* PostingPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662C1F691E412474000CDCCE /* PostingPinViewController.swift */; };
 		6662F06C1E3F833F00494E15 /* APIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6662F06B1E3F833F00494E15 /* APIConstants.swift */; };
 		6662F0701E3F970500494E15 /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6662F06F1E3F970500494E15 /* NetworkClient.swift */; };
+		6670FFBD1E426EEB003D19FE /* ViewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6670FFBC1E426EEB003D19FE /* ViewHelper.swift */; };
 		66D741BE1E40581A00DB8882 /* UdacityNetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66D741BD1E40581A00DB8882 /* UdacityNetworkClient.swift */; };
 		66E0280E1E41EF17009FA09E /* DequeuThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E0280D1E41EF17009FA09E /* DequeuThread.swift */; };
 		66F1E9D41E40878A0044D32C /* LoginViewTextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F1E9D31E40878A0044D32C /* LoginViewTextFieldDelegate.swift */; };
@@ -54,6 +55,7 @@
 		662C1F691E412474000CDCCE /* PostingPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostingPinViewController.swift; sourceTree = "<group>"; };
 		6662F06B1E3F833F00494E15 /* APIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConstants.swift; sourceTree = "<group>"; };
 		6662F06F1E3F970500494E15 /* NetworkClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
+		6670FFBC1E426EEB003D19FE /* ViewHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewHelper.swift; sourceTree = "<group>"; };
 		66D741BD1E40581A00DB8882 /* UdacityNetworkClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityNetworkClient.swift; sourceTree = "<group>"; };
 		66E0280D1E41EF17009FA09E /* DequeuThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DequeuThread.swift; sourceTree = "<group>"; };
 		66F1E9D31E40878A0044D32C /* LoginViewTextFieldDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewTextFieldDelegate.swift; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 			children = (
 				662C1F591E40CFE4000CDCCE /* NetworkConnectivityManager.swift */,
 				66E0280D1E41EF17009FA09E /* DequeuThread.swift */,
+				6670FFBC1E426EEB003D19FE /* ViewHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -321,6 +324,7 @@
 				662C1F5C1E40D268000CDCCE /* ParseNetworkClient.swift in Sources */,
 				66F1E9D41E40878A0044D32C /* LoginViewTextFieldDelegate.swift in Sources */,
 				66FE20EC1E3DCCE000972DE7 /* AppDelegate.swift in Sources */,
+				6670FFBD1E426EEB003D19FE /* ViewHelper.swift in Sources */,
 				662C1F641E4102F8000CDCCE /* OTMTableViewCell.swift in Sources */,
 				662C1F601E40EA59000CDCCE /* OTMTableViewController.swift in Sources */,
 				662C1F6A1E412474000CDCCE /* PostingPinViewController.swift in Sources */,

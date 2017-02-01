@@ -33,6 +33,7 @@ struct StudentInformation {
             let updatedAt = jsonData["updatedAt"] as? String else{
                 return nil
         }
+        
         self.createdAt = createdAt
         self.firstName = firstName
         self.lastName = lastName

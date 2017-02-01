@@ -20,20 +20,22 @@ class OTMMapViewController: UIViewController, MKMapViewDelegate {
         loadAndAddAnnotations()
     }
     
-    @IBAction func selectPin(_ sender: Any) {
-    }
-    
     @IBAction func logoutUser(_ sender: Any) {
-        let alert = showLogoutOverlay()
+        let alert = ViewHelper.showLoadingView(message: "Logging out...", showView: {
+            alert in
+            self.present(alert, animated: true, completion: nil)
+        })
+        
         NetworkClient.sharedInstance().logoutUserSession(completionForLogout: {
             (success, error) in
             alert.dismiss(animated: true, completion: nil)
             if success {
                 self.dismiss(animated: true, completion: nil)
-            } else{
-                let alert = UIAlertController(title: "Error", message: error, preferredStyle: UIAlertControllerStyle.actionSheet)
-                alert.addAction(UIAlertAction(title: "Back", style: UIAlertActionStyle.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
+            } else {
+                ViewHelper.showAlertForIncorrectState(message: error, showView: {
+                    alert in
+                    self.present(alert, animated: true, completion: nil)
+                })
             }
         })
     }
@@ -83,21 +85,10 @@ extension OTMMapViewController {
             }
         }, completionHandlerForError: {error in
             //display errors in case of download failure
-            let alert = UIAlertController(title: "Error", message: error, preferredStyle: UIAlertControllerStyle.actionSheet)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
+            ViewHelper.showAlertForIncorrectState(message: error, showView: {
+                alert in
+                self.present(alert, animated: true, completion: nil)
+            })
         })
-    }
-    
-    func showLogoutOverlay() -> UIViewController {
-        let alert = UIAlertController(title: nil, message: "Logging out...", preferredStyle: .alert)
-        alert.view.tintColor = UIColor.black
-        let loadingIndicator: UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50,height: 50)) as UIActivityIndicatorView
-        loadingIndicator.hidesWhenStopped = true
-        loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
-        loadingIndicator.startAnimating();
-        alert.view.addSubview(loadingIndicator)
-        present(alert, animated: true, completion: nil)
-        return alert
     }
 }

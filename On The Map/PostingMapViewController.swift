@@ -16,9 +16,13 @@ class PostingMapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var indicatorView: UIActivityIndicatorView!
     var enteredLocation: String?
+    var loadingView: UIViewController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadingView = ViewHelper.showLoadingView(message: "Loading...", showView: { alert in
+            self.present(alert, animated: true, completion: nil)
+        })
         mapView.delegate = self
         createGeoLocationFromAddress(enteredLocation!, mapView: mapView)
     }
@@ -34,7 +38,6 @@ class PostingMapViewController: UIViewController, MKMapViewDelegate {
     }
     
     func createGeoLocationFromAddress(_ address: String, mapView: MKMapView) {
-        
         let completion:CLGeocodeCompletionHandler = {(placemarks: [CLPlacemark]?, error: Error?) in
             if let placemarks = placemarks {
                 for placemark in placemarks {
@@ -49,8 +52,12 @@ class PostingMapViewController: UIViewController, MKMapViewDelegate {
                     self.centerMapOnLocation(placemark.location!, mapView: mapView)
                 }
             } else {
-                
+                ViewHelper.showAlertForIncorrectState(message: "Something went wrong. Try Again", showView: { alert in
+                    self.present(alert, animated: true, completion: nil)
+                })
             }
+            
+            self.loadingView?.dismiss(animated: true, completion: nil)
         }
         
         CLGeocoder().geocodeAddressString(address, completionHandler: completion)

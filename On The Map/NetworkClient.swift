@@ -28,6 +28,10 @@ class NetworkClient {
         return components.url!
     }
     
+    func createPOSTRequest() {
+        let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
+    }
+    
     class func sharedInstance() -> NetworkClient {
         struct Singleton {
             static var sharedInstance = NetworkClient()

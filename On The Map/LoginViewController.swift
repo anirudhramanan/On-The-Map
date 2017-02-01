@@ -60,12 +60,6 @@ extension LoginViewController{
         passwordTextField.delegate = textFieldDelegate
     }
     
-    func showAlertForIncorrectState(message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.actionSheet)
-        alert.addAction(UIAlertAction(title: "Back", style: UIAlertActionStyle.default, handler: nil))
-        present(alert, animated: true, completion: nil)
-    }
-    
     func configureUI(enabled: Bool) {
         usernameTextField.isEnabled = enabled
         passwordTextField.isEnabled = enabled
@@ -87,13 +81,22 @@ extension LoginViewController{
                     self.present(controller, animated: true, completion: nil)
                 } else {
                     self.configureUI(enabled: true)
-                    self.showAlertForIncorrectState(message: error!)
+                    ViewHelper.showAlertForIncorrectState(message: error, showView: {
+                        alert in
+                        self.present(alert, animated: true, completion: nil)
+                    })
                 }
             })
         } else if !networkAvailable{
-            showAlertForIncorrectState(message: "No Interent Connectivity. Connect to a working internet connection")
+            ViewHelper.showAlertForIncorrectState(message: "No Interent Connectivity. Connect to a working internet connection", showView: {
+                alert in
+                self.present(alert, animated: true, completion: nil)
+            })
         } else {
-            showAlertForIncorrectState(message: "Enter a valid Email Address / Password")
+            ViewHelper.showAlertForIncorrectState(message: "Enter a valid Email Address / Password", showView: {
+                alert in
+                self.present(alert, animated: true, completion: nil)
+            })
         }
     }
 }
