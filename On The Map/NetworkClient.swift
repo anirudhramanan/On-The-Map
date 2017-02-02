@@ -12,7 +12,7 @@ class NetworkClient {
     
     var session = URLSession.shared
     var sessionID: String? = nil
-
+    
     func urlFromParameters(_ host: String, _ parameters: [String:AnyObject], withPathExtension: String? = nil) -> URL {
         var components = URLComponents()
         components.scheme = APIConstants.Udacity.Constants.ApiScheme
@@ -28,8 +28,20 @@ class NetworkClient {
         return components.url!
     }
     
-    func createPOSTRequest() {
-        let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
+    func taskForParseAPI(_ method: String, _ headers :[String: String], _ body: Data?, taskCompletionHandler: @escaping(_ d: Data?,_ r: URLResponse?,_ e: NSError?) -> Void) {
+        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
+        request.httpMethod = method
+        for (key, value) in headers {
+            request.addValue(value, forHTTPHeaderField: key)
+        }
+        if body != nil {
+            request.httpBody = body!
+        }
+        let session = URLSession.shared
+        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+            taskCompletionHandler(data, response, error as NSError?)
+        }
+        task.resume()
     }
     
     class func sharedInstance() -> NetworkClient {

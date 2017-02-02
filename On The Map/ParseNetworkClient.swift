@@ -12,11 +12,13 @@ extension NetworkClient {
     
     func fetchStudentInformations(completionHandlerForSuccess : @escaping(_ listofStudent: [StudentInformation]) -> Void
         , completionHandlerForError: @escaping(_ error: String?) -> Void) {
-        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
-        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-        let session = URLSession.shared
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+        
+        var headers:[String: String] = [:]
+        headers["X-Parse-Application-Id"] = "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr"
+        headers["X-Parse-REST-API-Key"] = "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY"
+
+        taskForParseAPI("GET", headers, nil, taskCompletionHandler: {
+            (data, response, error) in
             if error != nil { // Handle error...
                 DispatchQueue.main.async {
                     completionHandlerForError(error?.localizedDescription)
@@ -43,27 +45,26 @@ extension NetworkClient {
             DispatchQueue.main.async {
                 completionHandlerForSuccess(studentInformations)
             }
-        }
-        task.resume()
+        })
     }
     
     func postStudentLocation(completionHandler: @escaping(_ success: Bool, _ error: String?) -> Void) {
         
-        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
-        request.httpMethod = "POST"
-        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = "{\"uniqueKey\": \"1234\", \"firstName\": \"John\", \"lastName\": \"Doe\",\"mapString\": \"Mountain View, CA\", \"mediaURL\": \"https://udacity.com\",\"latitude\": 37.386052, \"longitude\": -122.083851}".data(using: String.Encoding.utf8)
-        let session = URLSession.shared
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+        var headers:[String: String] = [:]
+        headers["X-Parse-Application-Id"] = "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr"
+        headers["X-Parse-REST-API-Key"] = "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY"
+        headers["Content-Type"] = "application/json"
+        
+        let httpBody = "{\"uniqueKey\": \"1234\", \"firstName\": \"John\", \"lastName\": \"Doe\",\"mapString\": \"Mountain View, CA\", \"mediaURL\": \"https://udacity.com\",\"latitude\": 37.386052, \"longitude\": -122.083851}".data(using: String.Encoding.utf8)
+        
+        taskForParseAPI("POST", headers, httpBody, taskCompletionHandler: {
+            (data, response, error) in
             if error != nil { // Handle error…
                 return
             }
             DispatchQueue.main.async {
                 completionHandler(true, nil)
             }
-        }
-        task.resume()
+        })
     }
 }
