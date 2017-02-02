@@ -26,4 +26,9 @@ struct APIConstants {
             static let Password = "password"
         }
     }
+    
+    struct ParseKeys {
+        static let APPLICATION_ID = "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr"
+        static let KEY = "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY"
+    }
 }

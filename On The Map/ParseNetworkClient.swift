@@ -14,8 +14,8 @@ extension NetworkClient {
         , completionHandlerForError: @escaping(_ error: String?) -> Void) {
         
         var headers:[String: String] = [:]
-        headers["X-Parse-Application-Id"] = "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr"
-        headers["X-Parse-REST-API-Key"] = "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY"
+        headers["X-Parse-Application-Id"] = APIConstants.ParseKeys.APPLICATION_ID
+        headers["X-Parse-REST-API-Key"] = APIConstants.ParseKeys.KEY
 
         taskForParseAPI("GET", headers, nil, taskCompletionHandler: {
             (data, response, error) in
@@ -51,8 +51,8 @@ extension NetworkClient {
     func postStudentLocation(completionHandler: @escaping(_ success: Bool, _ error: String?) -> Void) {
         
         var headers:[String: String] = [:]
-        headers["X-Parse-Application-Id"] = "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr"
-        headers["X-Parse-REST-API-Key"] = "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY"
+        headers["X-Parse-Application-Id"] = APIConstants.ParseKeys.APPLICATION_ID
+        headers["X-Parse-REST-API-Key"] = APIConstants.ParseKeys.KEY
         headers["Content-Type"] = "application/json"
         
         let httpBody = "{\"uniqueKey\": \"1234\", \"firstName\": \"John\", \"lastName\": \"Doe\",\"mapString\": \"Mountain View, CA\", \"mediaURL\": \"https://udacity.com\",\"latitude\": 37.386052, \"longitude\": -122.083851}".data(using: String.Encoding.utf8)
