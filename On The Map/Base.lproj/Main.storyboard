@@ -429,10 +429,7 @@
                             <outlet property="delegate" destination="7lO-iH-EWH" id="MCN-Oi-EzW"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="5Lf-6Q-xG7">
-                        <barButtonItem key="leftBarButtonItem" title="Logout" id="kJQ-kY-ptu"/>
-                        <barButtonItem key="rightBarButtonItem" image="icon_pin" id="0Fh-ze-oLU"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="5Lf-6Q-xG7"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1aM-he-lIV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -12,7 +12,6 @@ extension NetworkClient {
     
     func fetchStudentInformations(completionHandlerForSuccess : @escaping(_ listofStudent: [StudentInformation]) -> Void
         , completionHandlerForError: @escaping(_ error: String?) -> Void) {
-        
         var headers:[String: String] = [:]
         headers["X-Parse-Application-Id"] = APIConstants.ParseKeys.APPLICATION_ID
         headers["X-Parse-REST-API-Key"] = APIConstants.ParseKeys.KEY
@@ -57,7 +56,6 @@ extension NetworkClient {
             else{
                 return
             }
-            
             var userData = StudentInformation()
             userData.longitude = longitude!
             userData.latitude = latitude!
@@ -66,7 +64,6 @@ extension NetworkClient {
             userData.firstName = firstName
             userData.lastName = lastName
             userData.uniqueKey = (SessionStore.sharedInstance.session.account?.key)!
-            
             self.postLocationToParse(userData, completionHandler)
         })
     }
@@ -78,7 +75,6 @@ extension NetworkClient {
         headers["Content-Type"] = "application/json"
      
         let body = "{\"uniqueKey\": \"\(user.uniqueKey!)\", \"firstName\": \"\(user.firstName!)\", \"lastName\": \"\(user.lastName!)\", \"mapString\": \"\(user.mapString!)\",\"mediaURL\": \"\(user.mediaURL!)\", \"latitude\": \(user.latitude!), \"longitude\": \(user.longitude!)}".data(using: String.Encoding.utf8)
-
         
         self.taskForParseAPI("POST", headers, body!, taskCompletionHandler: {
             (data, response, error) in

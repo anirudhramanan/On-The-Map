@@ -9,15 +9,18 @@
 import Foundation
 
 extension NetworkClient {
-
+    
     func authenticateUser(username: String, password: String, completionHandlerForAuth : @escaping(_ success: Bool, _ error: String?) -> Void) {
-        let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = "{\"udacity\": {\"username\": \"\(username)\", \"password\": \"\(password)\"}}".data(using: String.Encoding.utf8)
-        let session = URLSession.shared
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+        
+        var headers:[String: String] = [:]
+        headers["Accept"] = "application/json"
+        headers["Content-Type"] = "application/json"
+        
+        let httpBody = "{\"udacity\": {\"username\": \"\(username)\", \"password\": \"\(password)\"}}".data(using: String.Encoding.utf8)
+        
+        taskForUdacityAPI("https://www.udacity.com/api/session", "POST", headers, httpBody, nil, taskCompletionHandler: {
+            (data, response, error) in
+            
             if error != nil {
                 //error
                 DequeuThread.runOnMainThread({
@@ -35,7 +38,7 @@ extension NetworkClient {
             let newData = data?.subdata(in: range)
             let json = try? JSONSerialization.jsonObject(with: newData!, options: [])
             let success = SessionStore.sharedInstance.storeSession(json as! [String: Any]).account?.registered
-                
+            
             if success != nil && success! {
                 DequeuThread.runOnMainThread({
                     completionHandlerForAuth(success!, error?.localizedDescription)
@@ -45,23 +48,24 @@ extension NetworkClient {
                     completionHandlerForAuth(false, "Something went wrong!")
                 })
             }
-        }
-        task.resume()
+        })
     }
     
     func logoutUserSession(completionForLogout: @escaping(_ success: Bool, _ error: String?) -> Void) {
-        let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
-        request.httpMethod = "DELETE"
+        
         var xsrfCookie: HTTPCookie? = nil
         let sharedCookieStorage = HTTPCookieStorage.shared
         for cookie in sharedCookieStorage.cookies! {
             if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
         }
+        var cookies: [String: String] = [:]
         if let xsrfCookie = xsrfCookie {
-            request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
+            cookies["X-XSRF-TOKEN"] = xsrfCookie.value
         }
-        let session = URLSession.shared
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+        
+        taskForUdacityAPI("https://www.udacity.com/api/session", "DELETE", nil, nil, cookies, taskCompletionHandler: {
+            (data, response, error) in
+            
             if error != nil { // Handle error…
                 DequeuThread.runOnMainThread({
                     completionForLogout(false, error?.localizedDescription)
@@ -78,14 +82,14 @@ extension NetworkClient {
             DequeuThread.runOnMainThread({
                 completionForLogout(true, nil)
             })
-        }
-        task.resume()
+        })
     }
     
     func fetchUserData(completionHandlerForUserData: @escaping(_ data: [String: Any]) -> Void) {
-        let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/users/" + (SessionStore.sharedInstance.session.account?.key)!)!)
-        let session = URLSession.shared
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+        
+        let url  = "https://www.udacity.com/api/users/" + (SessionStore.sharedInstance.session.account?.key)!
+        taskForUdacityAPI(url, "GET", nil, nil, nil, taskCompletionHandler: {
+            (data, response, error) in
             if error != nil { // Handle error...
                 return
             }
@@ -93,7 +97,6 @@ extension NetworkClient {
             let newData = data?.subdata(in: range) /* subset response data! */
             let json = try? JSONSerialization.jsonObject(with: newData!, options: []) as! [String: Any]
             completionHandlerForUserData(json!)
-        }
-        task.resume()
+        })
     }
 }
