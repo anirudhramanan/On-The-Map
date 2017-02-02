@@ -13,11 +13,15 @@ class OTMMapViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var selectPin: UIBarButtonItem!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureMap()
         loadAndAddAnnotations()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     @IBAction func logoutUser(_ sender: Any) {
@@ -56,11 +60,11 @@ class OTMMapViewController: UIViewController, MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        if control == view.rightCalloutAccessoryView {
-            let app = UIApplication.shared
-            if let toOpen = view.annotation?.subtitle! {
-                app.open(NSURL(string:toOpen) as! URL, options: [:], completionHandler: nil)
+        if let mediaURL = view.annotation?.subtitle {
+            guard let url = URL(string: (mediaURL?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!) else{
+                return
             }
+            UIApplication.shared.open(url as URL, options: [:], completionHandler: nil)
         }
     }
 }
@@ -72,14 +76,16 @@ extension OTMMapViewController {
         mapView.setCenter(self.mapView.region.center, animated: true)
     }
     
-    func loadAndAddAnnotations(){
+    func loadAndAddAnnotations() {
+        StudentInformationStore.sharedInstance.studentInformation = []
         NetworkClient.sharedInstance().fetchStudentInformations(completionHandlerForSuccess: {
             (response) in
             for studentInfo in response {
                 //we got a successful response with the data, let's add annotations on the map
                 let annotation = MKPointAnnotation()
-                annotation.coordinate = CLLocationCoordinate2D(latitude: studentInfo.latitude, longitude: studentInfo.longitude)
-                annotation.title = studentInfo.firstName + " " + studentInfo.lastName
+                
+                annotation.coordinate = CLLocationCoordinate2D(latitude: studentInfo.latitude!, longitude: studentInfo.longitude!)
+                annotation.title = studentInfo.firstName! + " " + studentInfo.lastName!
                 annotation.subtitle = studentInfo.mediaURL
                 self.mapView.addAnnotation(annotation)
             }

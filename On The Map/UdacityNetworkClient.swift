@@ -34,12 +34,11 @@ extension NetworkClient {
             let range = Range(uncheckedBounds: (5, data!.count))
             let newData = data?.subdata(in: range)
             let json = try? JSONSerialization.jsonObject(with: newData!, options: [])
-            let session: Session = Session(jsonData: json as! [String : Any])!
-            let success = (session.account?.registered)!
+            let success = SessionStore.sharedInstance.storeSession(json as! [String: Any]).account?.registered
                 
-            if success {
+            if success != nil && success! {
                 DequeuThread.runOnMainThread({
-                    completionHandlerForAuth(success, error?.localizedDescription)
+                    completionHandlerForAuth(success!, error?.localizedDescription)
                 })
             } else{
                 DequeuThread.runOnMainThread({
@@ -79,6 +78,21 @@ extension NetworkClient {
             DequeuThread.runOnMainThread({
                 completionForLogout(true, nil)
             })
+        }
+        task.resume()
+    }
+    
+    func fetchUserData(completionHandlerForUserData: @escaping(_ data: [String: Any]) -> Void) {
+        let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/users/" + (SessionStore.sharedInstance.session.account?.key)!)!)
+        let session = URLSession.shared
+        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+            if error != nil { // Handle error...
+                return
+            }
+            let range = Range(uncheckedBounds: (5, data!.count))
+            let newData = data?.subdata(in: range) /* subset response data! */
+            let json = try? JSONSerialization.jsonObject(with: newData!, options: []) as! [String: Any]
+            completionHandlerForUserData(json!)
         }
         task.resume()
     }

@@ -9,16 +9,16 @@
 import Foundation
 
 struct StudentInformation {
-    var createdAt: String
-    var firstName: String
-    var lastName: String
-    var latitude: Double
-    var longitude: Double
-    var mapString: String
-    var mediaURL: String
-    var objectId: String
-    var uniqueKey: String
-    var updatedAt: String
+    var createdAt: String?
+    var firstName: String?
+    var lastName: String?
+    var latitude: Double?
+    var longitude: Double?
+    var mapString: String?
+    var mediaURL: String?
+    var objectId: String?
+    var uniqueKey: String?
+    var updatedAt: String?
     
     init?(jsonData: [String: AnyObject]) {
         guard let createdAt = jsonData["createdAt"] as? String,
@@ -45,4 +45,6 @@ struct StudentInformation {
         self.uniqueKey = uniqueKey
         self.updatedAt = updatedAt
     }
+    
+    init () {}
 }

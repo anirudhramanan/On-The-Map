@@ -17,9 +17,12 @@ class PostingMapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var indicatorView: UIActivityIndicatorView!
     var enteredLocation: String?
     var loadingView: UIViewController?
+    var latitude: Double?
+    var longitude: Double?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        submitButton.isEnabled = false
         loadingView = ViewHelper.showLoadingView(message: "Loading...", showView: { alert in
             self.present(alert, animated: true, completion: nil)
         })
@@ -29,10 +32,14 @@ class PostingMapViewController: UIViewController, MKMapViewDelegate {
     
     @IBAction func submit(_ sender: Any) {
         indicatorView.isHidden = false
-        NetworkClient.sharedInstance().postStudentLocation(completionHandler: {
+        NetworkClient.sharedInstance().postStudentLocation(enteredLocation, enteredUrl.text, latitude, longitude, {
             (success, error) in
             if success {
                 self.dismiss(animated: true, completion: nil)
+            } else{
+                ViewHelper.showAlertForIncorrectState(message: error, showView: { alert in
+                    self.present(alert, animated: true, completion: nil)
+                })
             }
         })
     }
@@ -46,6 +53,8 @@ class PostingMapViewController: UIViewController, MKMapViewDelegate {
                     let annotation = MKPointAnnotation()
                     // Annotation coordinate
                     annotation.coordinate = (placemark.location?.coordinate)!
+                    self.longitude = annotation.coordinate.longitude
+                    self.latitude = annotation.coordinate.latitude
                     annotation.subtitle = placemark.subLocality
                     mapView.addAnnotation(annotation)
                     mapView.showsPointsOfInterest = true
@@ -57,6 +66,7 @@ class PostingMapViewController: UIViewController, MKMapViewDelegate {
                 })
             }
             
+            self.submitButton.isEnabled = true
             self.loadingView?.dismiss(animated: true, completion: nil)
         }
         
