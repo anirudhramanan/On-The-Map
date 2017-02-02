@@ -19,11 +19,7 @@ class OTMMapViewController: UIViewController, MKMapViewDelegate {
         configureMap()
         loadAndAddAnnotations()
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-    
+ 
     @IBAction func logoutUser(_ sender: Any) {
         let alert = ViewHelper.showLoadingView(message: "Logging out...", showView: {
             alert in
@@ -35,7 +31,7 @@ class OTMMapViewController: UIViewController, MKMapViewDelegate {
             alert.dismiss(animated: true, completion: nil)
             if success {
                 self.dismiss(animated: true, completion: nil)
-            } else {
+        } else {
                 ViewHelper.showAlertForIncorrectState(message: error, showView: {
                     alert in
                     self.present(alert, animated: true, completion: nil)

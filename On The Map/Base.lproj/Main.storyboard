@@ -250,7 +250,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oI5-Ga-ppQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4463.1999999999998" y="-285.60719640179911"/>
+            <point key="canvasLocation" x="4420" y="37"/>
         </scene>
         <!--Posting Map View Controller-->
         <scene sceneID="0y7-Na-4OZ">
@@ -384,7 +384,7 @@
         <scene sceneID="xz0-gM-9lU">
             <objects>
                 <tableViewController id="7lO-iH-EWH" customClass="OTMTableViewController" customModule="On_The_Map" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" id="jYV-BX-8MN">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" id="jYV-BX-8MN">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -429,7 +429,18 @@
                             <outlet property="delegate" destination="7lO-iH-EWH" id="MCN-Oi-EzW"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="5Lf-6Q-xG7"/>
+                    <navigationItem key="navigationItem" id="5Lf-6Q-xG7">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="8VP-Rx-AAQ">
+                            <connections>
+                                <action selector="logoutUser:" destination="7lO-iH-EWH" id="wIa-9p-O63"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="icon_pin" id="tqo-EN-CcI">
+                            <connections>
+                                <segue destination="v3X-al-bCM" kind="show" id="VVq-bl-WP3"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1aM-he-lIV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -470,7 +481,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AeA-d7-oDy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3524" y="-286.50674662668666"/>
+            <point key="canvasLocation" x="3542" y="59"/>
         </scene>
     </scenes>
     <resources>
@@ -481,4 +492,7 @@
         <image name="icon_pin" width="24" height="24"/>
         <image name="udacity_icon" width="62" height="62"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="VVq-bl-WP3"/>
+    </inferredMetricsTieBreakers>
 </document>

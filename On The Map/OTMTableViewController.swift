@@ -17,8 +17,27 @@ class OTMTableViewController: UITableViewController {
         loadData()
     }
 
+    @IBAction func logoutUser(_ sender: Any) {
+        let alert = ViewHelper.showLoadingView(message: "Logging out...", showView: {
+            alert in
+            self.present(alert, animated: true, completion: nil)
+        })
+        
+        NetworkClient.sharedInstance().logoutUserSession(completionForLogout: {
+            (success, error) in
+            alert.dismiss(animated: true, completion: nil)
+            if success {
+                self.dismiss(animated: true, completion: nil)
+            } else {
+                ViewHelper.showAlertForIncorrectState(message: error, showView: {
+                    alert in
+                    self.present(alert, animated: true, completion: nil)
+                })
+            }
+        })
+    }
+    
     // MARK: - Table view data source
-
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -36,7 +55,12 @@ class OTMTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let studentInfo = studentInformation[indexPath.row]
-        UIApplication.shared.open(NSURL(string: studentInfo.mediaURL!) as! URL, options: [:], completionHandler: nil)
+        if let mediaURL = studentInfo.mediaURL {
+            guard let url = URL(string: (mediaURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!) else{
+                return
+            }	
+            UIApplication.shared.open(url as URL, options: [:], completionHandler: nil)
+        }
     }
     
     private func loadData() {
