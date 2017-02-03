@@ -9,10 +9,15 @@
 import UIKit
 import MapKit
 
-class PostingPinViewController: UIViewController, MKMapViewDelegate {
+class PostingPinViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var locationText: UITextField!
     var loadingView: UIViewController?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        locationText.delegate = self
+    }
     
     @IBAction func cancel(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -64,5 +69,10 @@ class PostingPinViewController: UIViewController, MKMapViewDelegate {
         }
         
         CLGeocoder().geocodeAddressString(address, completionHandler: completion)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
