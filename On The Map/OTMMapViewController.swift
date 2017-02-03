@@ -57,10 +57,17 @@ class OTMMapViewController: UIViewController, MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if let mediaURL = view.annotation?.subtitle {
-            guard let url = URL(string: (mediaURL?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!) else{
+            guard let url = NSURL(string: (mediaURL?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!) else{
                 return
             }
-            UIApplication.shared.open(url as URL, options: [:], completionHandler: nil)
+            if verifyUrl(url: url){
+                UIApplication.shared.open(url as URL, options: [:], completionHandler: nil)
+            } else{
+                ViewHelper.showAlertForIncorrectState(message: "Illformed URL", showView: {
+                    alert in
+                    self.present(alert, animated: true, completion: nil)
+                })
+            }
         }
     }
 }
@@ -92,5 +99,14 @@ extension OTMMapViewController {
                 self.present(alert, animated: true, completion: nil)
             })
         })
+    }
+    
+    func verifyUrl (url: NSURL?) -> Bool {
+        //Check for nil
+        if let url = url {
+            // check if your application can open the NSURL instance
+            return UIApplication.shared.canOpenURL(url as URL)
+        }
+        return false
     }
 }

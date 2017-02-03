@@ -9,68 +9,48 @@
 import UIKit
 import MapKit
 
-class PostingMapViewController: UIViewController, MKMapViewDelegate {
+class PostingMapViewController: UIViewController, MKMapViewDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var enteredUrl: UITextField!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var indicatorView: UIActivityIndicatorView!
     var enteredLocation: String?
-    var loadingView: UIViewController?
     var latitude: Double?
     var longitude: Double?
-
+    var placemarks: [CLPlacemark]!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        submitButton.isEnabled = false
-        loadingView = ViewHelper.showLoadingView(message: "Loading...", showView: { alert in
-            self.present(alert, animated: true, completion: nil)
-        })
-        mapView.delegate = self
-        createGeoLocationFromAddress(enteredLocation!, mapView: mapView)
+        configureDelegates()
+        loadGeoLocation()
+    }
+    
+    @IBAction func cancel(_ sender: Any) {
+        dismiss(animated: false, completion: nil)
+        self.presentingViewController?.dismiss(animated: false, completion: nil)
     }
     
     @IBAction func submit(_ sender: Any) {
         indicatorView.isHidden = false
         NetworkClient.sharedInstance().postStudentLocation(enteredLocation, enteredUrl.text, latitude, longitude, {
             (success, error) in
+            if error != nil {
+                ViewHelper.showAlertForIncorrectState(message: error, showView: { alert in
+                    self.present(alert, animated: true, completion: nil)
+                })
+                return
+            }
+            
             if success {
-                self.dismiss(animated: true, completion: nil)
+                self.dismiss(animated: false, completion: nil)
+                self.presentingViewController?.dismiss(animated: false, completion: nil)
             } else{
                 ViewHelper.showAlertForIncorrectState(message: error, showView: { alert in
                     self.present(alert, animated: true, completion: nil)
                 })
             }
         })
-    }
-    
-    func createGeoLocationFromAddress(_ address: String, mapView: MKMapView) {
-        let completion:CLGeocodeCompletionHandler = {(placemarks: [CLPlacemark]?, error: Error?) in
-            if let placemarks = placemarks {
-                for placemark in placemarks {
-                    mapView.removeAnnotations(mapView.annotations)
-                    // Instantiate annotation
-                    let annotation = MKPointAnnotation()
-                    // Annotation coordinate
-                    annotation.coordinate = (placemark.location?.coordinate)!
-                    self.longitude = annotation.coordinate.longitude
-                    self.latitude = annotation.coordinate.latitude
-                    annotation.subtitle = placemark.subLocality
-                    mapView.addAnnotation(annotation)
-                    mapView.showsPointsOfInterest = true
-                    self.centerMapOnLocation(placemark.location!, mapView: mapView)
-                }
-            } else {
-                ViewHelper.showAlertForIncorrectState(message: "Something went wrong. Try Again", showView: { alert in
-                    self.present(alert, animated: true, completion: nil)
-                })
-            }
-            
-            self.submitButton.isEnabled = true
-            self.loadingView?.dismiss(animated: true, completion: nil)
-        }
-        
-        CLGeocoder().geocodeAddressString(address, completionHandler: completion)
     }
     
     func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
@@ -87,5 +67,32 @@ class PostingMapViewController: UIViewController, MKMapViewDelegate {
         let regionRadius: CLLocationDistance = 1000
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius * 2.0, regionRadius * 2.0)
         mapView.setRegion(coordinateRegion, animated: true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    private func loadGeoLocation() {
+        
+        for placemark in placemarks {
+            mapView.removeAnnotations(mapView.annotations)
+            // Instantiate annotation
+            let annotation = MKPointAnnotation()
+            // Annotation coordinate
+            annotation.coordinate = (placemark.location?.coordinate)!
+            self.longitude = annotation.coordinate.longitude
+            self.latitude = annotation.coordinate.latitude
+            annotation.subtitle = placemark.subLocality
+            mapView.addAnnotation(annotation)
+            mapView.showsPointsOfInterest = true
+            self.centerMapOnLocation(placemark.location!, mapView: mapView)
+        }
+    }
+    
+    private func configureDelegates() {
+        enteredUrl.delegate = self
+        mapView.delegate = self
     }
 }

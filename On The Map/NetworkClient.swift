@@ -13,8 +13,8 @@ class NetworkClient {
     var session = URLSession.shared
     var sessionID: String? = nil
   
-    func taskForParseAPI(_ method: String, _ headers :[String: String], _ body: Data?, taskCompletionHandler: @escaping(_ d: Data?,_ r: URLResponse?,_ e: NSError?) -> Void) {
-        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
+    func taskForParseAPI(_ url: String, _ method: String, _ headers :[String: String], _ body: Data?, taskCompletionHandler: @escaping(_ d: Data?,_ r: URLResponse?,_ e: NSError?) -> Void) {
+        let request = NSMutableURLRequest(url: URL(string: url)!)
         request.httpMethod = method
         for (key, value) in headers {
             request.addValue(value, forHTTPHeaderField: key)

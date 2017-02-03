@@ -9,12 +9,9 @@
 import UIKit
 
 class OTMTableViewController: UITableViewController {
-
-    var studentInformation: [StudentInformation] = []
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        loadData()
     }
 
     @IBAction func logoutUser(_ sender: Any) {
@@ -43,30 +40,24 @@ class OTMTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return studentInformation.count
+        return StudentInformationStore.sharedInstance.studentInformation.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "studentInfo", for: indexPath) as! OTMTableViewCell
-        let studentInfo = studentInformation[indexPath.row]
+        let studentInfo = StudentInformationStore.sharedInstance.studentInformation[indexPath.row]
         cell.personName.text = studentInfo.firstName! + " " + studentInfo.lastName!
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let studentInfo = studentInformation[indexPath.row]
+        tableView.deselectRow(at: indexPath, animated: true)
+        let studentInfo = StudentInformationStore.sharedInstance.studentInformation[indexPath.row]
         if let mediaURL = studentInfo.mediaURL {
             guard let url = URL(string: (mediaURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!) else{
                 return
             }	
             UIApplication.shared.open(url as URL, options: [:], completionHandler: nil)
         }
-    }
-    
-    private func loadData() {
-        studentInformation = StudentInformationStore.sharedInstance.studentInformation
-        studentInformation.sort(by : {
-            $0.createdAt! > $1.createdAt!
-        })
     }
 }

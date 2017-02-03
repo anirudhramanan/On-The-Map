@@ -16,7 +16,7 @@ extension NetworkClient {
         headers["X-Parse-Application-Id"] = APIConstants.ParseKeys.APPLICATION_ID
         headers["X-Parse-REST-API-Key"] = APIConstants.ParseKeys.KEY
         
-        taskForParseAPI("GET", headers, nil, taskCompletionHandler: {
+        taskForParseAPI("https://parse.udacity.com/parse/classes/StudentLocation?order=-updatedAt", "GET", headers, nil, taskCompletionHandler: {
             (data, response, error) in
             if error != nil { // Handle error...
                 DispatchQueue.main.async {
@@ -76,7 +76,7 @@ extension NetworkClient {
      
         let body = "{\"uniqueKey\": \"\(user.uniqueKey!)\", \"firstName\": \"\(user.firstName!)\", \"lastName\": \"\(user.lastName!)\", \"mapString\": \"\(user.mapString!)\",\"mediaURL\": \"\(user.mediaURL!)\", \"latitude\": \(user.latitude!), \"longitude\": \(user.longitude!)}".data(using: String.Encoding.utf8)
         
-        self.taskForParseAPI("POST", headers, body!, taskCompletionHandler: {
+        self.taskForParseAPI("https://parse.udacity.com/parse/classes/StudentLocation", "POST", headers, body!, taskCompletionHandler: {
             (data, response, error) in
             if error != nil { // Handle error…
                 DispatchQueue.main.async {
@@ -100,7 +100,9 @@ extension NetworkClient {
                 return
             }
             
-            completionHandler(true, nil)
+            DispatchQueue.main.async {
+                completionHandler(true, nil)
+            }
         })
     }
 }

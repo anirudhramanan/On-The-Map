@@ -10,29 +10,59 @@ import UIKit
 import MapKit
 
 class PostingPinViewController: UIViewController, MKMapViewDelegate {
-
+    
     @IBOutlet weak var locationText: UITextField!
+    var loadingView: UIViewController?
     
     @IBAction func cancel(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
-
-    @IBAction func locateOnMap(_ sender: Any) {
-       
+    
+    private func dismissLoadingScreen() {
+        self.loadingView?.dismiss(animated: true, completion: nil)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        super.prepare(for: segue, sender: sender)
+    @IBAction func locateOnMap(_ sender: Any) {
+        loadingView = ViewHelper.showLoadingView(message: "Loading...", showView: { alert in
+            self.present(alert, animated: true, completion: nil)
+        })
         
-        switch(segue.identifier ?? ""){
-        case "openMapPin":
-            guard let destVC = segue.destination as? PostingMapViewController else{
-                fatalError("Unexpected destination: \(segue.destination)")
-            }
-            destVC.enteredLocation = locationText.text
-            break
-        default:
-            break
+        guard let locationTextString = locationText.text else {
+            ViewHelper.showAlertForIncorrectState(message: "Please enter a location", showView: { alert in
+                self.present(alert, animated: true, completion: nil)
+            })
+            dismissLoadingScreen()
+            return
         }
+        
+        self.createGeoLocationFromAddress(locationTextString, {
+            (placemarks, error) in
+            
+            if error != nil {
+                ViewHelper.showAlertForIncorrectState(message: error?.localizedDescription, showView: { alert in
+                    self.present(alert, animated: true, completion: nil)
+                })
+                self.dismissLoadingScreen()
+                return
+            }
+            
+            let controller = self.storyboard!.instantiateViewController(withIdentifier: "PostingMapViewController") as! PostingMapViewController
+            controller.enteredLocation = locationTextString
+            controller.placemarks = placemarks
+            self.dismissLoadingScreen()
+            self.present(controller, animated: true, completion: nil)
+        })
+    }
+    
+    func createGeoLocationFromAddress(_ address: String,_ completeGeo: @escaping(_ placemarks: [CLPlacemark]?, _ error: Error?) -> Void) {
+        let completion:CLGeocodeCompletionHandler = {(placemarks: [CLPlacemark]?, error: Error?) in
+            if let placemarks = placemarks {
+                completeGeo(placemarks, nil)
+            }  else if error != nil {
+                completeGeo(nil, error)
+            }
+        }
+        
+        CLGeocoder().geocodeAddressString(address, completionHandler: completion)
     }
 }
