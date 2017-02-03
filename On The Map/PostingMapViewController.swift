@@ -31,26 +31,19 @@ class PostingMapViewController: UIViewController, MKMapViewDelegate, UITextField
         self.presentingViewController?.dismiss(animated: false, completion: nil)
     }
     
+    private func hideIndicator(_ enable: Bool) {
+        indicatorView.isHidden = enable
+    }
+    
     @IBAction func submit(_ sender: Any) {
-        indicatorView.isHidden = false
-        NetworkClient.sharedInstance().postStudentLocation(enteredLocation, enteredUrl.text, latitude, longitude, {
-            (success, error) in
-            if error != nil {
-                ViewHelper.showAlertForIncorrectState(message: error, showView: { alert in
-                    self.present(alert, animated: true, completion: nil)
-                })
-                return
-            }
-            
-            if success {
-                self.dismiss(animated: false, completion: nil)
-                self.presentingViewController?.dismiss(animated: false, completion: nil)
-            } else{
-                ViewHelper.showAlertForIncorrectState(message: error, showView: { alert in
-                    self.present(alert, animated: true, completion: nil)
-                })
-            }
-        })
+        if NetworkConnectivityManager.isInternetAvailable() {
+            hideIndicator(false)
+            postStudentLocation()
+        } else{
+            ViewHelper.showAlertForIncorrectState(message: "No Internet Connectivity", showView: { alert in
+                self.present(alert, animated: true, completion: nil)
+            })
+        }
     }
     
     func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
@@ -73,9 +66,10 @@ class PostingMapViewController: UIViewController, MKMapViewDelegate, UITextField
         textField.resignFirstResponder()
         return true
     }
-    
-    private func loadGeoLocation() {
-        
+}
+
+extension PostingMapViewController {
+    func loadGeoLocation() {
         for placemark in placemarks {
             mapView.removeAnnotations(mapView.annotations)
             // Instantiate annotation
@@ -91,8 +85,29 @@ class PostingMapViewController: UIViewController, MKMapViewDelegate, UITextField
         }
     }
     
-    private func configureDelegates() {
+    func configureDelegates() {
         enteredUrl.delegate = self
         mapView.delegate = self
+    }
+    
+    func postStudentLocation() {
+        NetworkClient.sharedInstance().postStudentLocation(enteredLocation, enteredUrl.text, latitude, longitude, {
+            (success, error) in
+            if error != nil {
+                ViewHelper.showAlertForIncorrectState(message: error, showView: { alert in
+                    self.present(alert, animated: true, completion: nil)
+                })
+                return
+            }
+            
+            if success {
+                self.dismiss(animated: false, completion: nil)
+                self.presentingViewController?.dismiss(animated: false, completion: nil)
+            } else {
+                ViewHelper.showAlertForIncorrectState(message: error, showView: { alert in
+                    self.present(alert, animated: true, completion: nil)
+                })
+            }
+        })
     }
 }

@@ -87,7 +87,7 @@ extension LoginViewController{
                     })
                 }
             })
-        } else if !networkAvailable{
+        } else if !networkAvailable {
             ViewHelper.showAlertForIncorrectState(message: "No Interent Connectivity. Connect to a working internet connection", showView: {
                 alert in
                 self.present(alert, animated: true, completion: nil)

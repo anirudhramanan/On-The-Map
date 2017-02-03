@@ -28,33 +28,34 @@ class PostingPinViewController: UIViewController, MKMapViewDelegate, UITextField
     }
     
     @IBAction func locateOnMap(_ sender: Any) {
+        let locationString = locationText.text
+        
+        if locationString == nil || locationString == "" {
+            ViewHelper.showAlertForIncorrectState(message: "Please enter a location", showView: { alert in
+                self.present(alert, animated: true, completion: nil)
+            })
+            return
+        }
+        
         loadingView = ViewHelper.showLoadingView(message: "Loading...", showView: { alert in
             self.present(alert, animated: true, completion: nil)
         })
         
-        guard let locationTextString = locationText.text else {
-            ViewHelper.showAlertForIncorrectState(message: "Please enter a location", showView: { alert in
-                self.present(alert, animated: true, completion: nil)
-            })
-            dismissLoadingScreen()
-            return
-        }
-        
-        self.createGeoLocationFromAddress(locationTextString, {
+        self.createGeoLocationFromAddress(locationString!, {
             (placemarks, error) in
             
             if error != nil {
-                ViewHelper.showAlertForIncorrectState(message: error?.localizedDescription, showView: { alert in
+                self.dismissLoadingScreen()
+                ViewHelper.showAlertForIncorrectState(message: "Error parsing the given location", showView: { alert in
                     self.present(alert, animated: true, completion: nil)
                 })
-                self.dismissLoadingScreen()
                 return
             }
             
-            let controller = self.storyboard!.instantiateViewController(withIdentifier: "PostingMapViewController") as! PostingMapViewController
-            controller.enteredLocation = locationTextString
-            controller.placemarks = placemarks
             self.dismissLoadingScreen()
+            let controller = self.storyboard!.instantiateViewController(withIdentifier: "PostingMapViewController") as! PostingMapViewController
+            controller.enteredLocation = locationString!
+            controller.placemarks = placemarks
             self.present(controller, animated: true, completion: nil)
         })
     }
@@ -62,9 +63,13 @@ class PostingPinViewController: UIViewController, MKMapViewDelegate, UITextField
     func createGeoLocationFromAddress(_ address: String,_ completeGeo: @escaping(_ placemarks: [CLPlacemark]?, _ error: Error?) -> Void) {
         let completion:CLGeocodeCompletionHandler = {(placemarks: [CLPlacemark]?, error: Error?) in
             if let placemarks = placemarks {
-                completeGeo(placemarks, nil)
+                DequeuThread.runOnMainThread {
+                    completeGeo(placemarks, nil)
+                }
             }  else if error != nil {
-                completeGeo(nil, error)
+                DequeuThread.runOnMainThread {
+                    completeGeo(nil, error)
+                }
             }
         }
         
